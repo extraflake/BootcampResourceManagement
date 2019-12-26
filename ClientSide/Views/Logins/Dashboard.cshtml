@@ -1,0 +1,23 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutAdministrator.cshtml";
+}
+
+@using Microsoft.AspNetCore.Http;
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Success</title>
+</head>
+<body>
+
+    <h3>Success Page</h3>
+    Welcome Home, @Context.Session.GetString("Name")
+    Your id is @Context.Session.GetString("Id")
+    Yout email is @Context.Session.GetString("Email")
+    <br>
+    @*<a asp-controller="account" asp-action="logout">Logout</a>*@
+
+</body>
+</html>

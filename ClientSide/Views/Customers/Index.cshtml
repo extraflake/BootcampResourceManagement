@@ -1,0 +1,175 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdministrator.cshtml";
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item bold"><a href="@Url.Action("Index","Home")"><b><font size="5">Home</font></b></a></li>
+                <li class="breadcrumb-item active"><font size="5">Customers</font></li>
+            </ol>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                @*<div class="upload-btn-wrapper">
+                        <a href="~/ImportEmployees.xlsx" download class="fa fa-cloud-download btn btn-dwn"></a>
+                    </div>*@
+                <div class="upload-btn-wrapper">
+                    <button type="button" id="Create" class="btn right fa fa-plus-circle btn-add" data-toggle="modal" data-target="#myModal" onclick="ClearScreen();"></button>
+                </div>
+            </div>
+        </div>
+        <br />
+        <table class="table table-hover" id="table">
+            <thead>
+                <tr>
+                    <th style="background-color:#009efb;color:white;text-align:center">
+                        No.
+                    </th>
+                    <th style="background-color:#009efb;color:white;text-align:center">
+                        Name
+                    </th>
+                    <th style="background-color:#009efb;color:white;text-align:center">
+                        Address
+                    </th>
+                    <th style="background-color:#009efb;color:white;text-align:center">
+                        Phone
+                    </th>
+                    <th style="background-color:#009efb;color:white;text-align:center">
+                        Relation Manager
+                    </th>
+                    <th style="background-color:#009efb;color:white;text-align:center">
+                        Village
+                    </th>
+                    <th style="background-color:#009efb;color:white;text-align:center" class="no-sort">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="tbody"></tbody>
+        </table>
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Customer Form</h4>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="Id">Id</label>
+                        <input type="text" class="form-control" id="Id" placeholder="Id" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Name">Name</label>
+                        <input type="text" class="form-control" id="Name" placeholder="Name" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Address">Address</label>
+                        <input type="text" class="form-control" id="Address" placeholder="Address" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Phone">Phone</label>
+                        <div class="form-inline">
+                            <input type="number" class="form-control col-md-2" placeholder="+62" disabled="disabled" />
+                            <input type="text" class="form-control col-md-10" id="Phone" name="phone" placeholder="Phone Number" onkeypress="ValidatePhone(event)" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Relation Manager">Relation Manager</label>
+                        <select id="RelationManager" class="pc form-control">
+                            <option>Select Manager</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Hiring_Location">Hiring Location</label>
+                        <select id="Province" class="pc form-control" onchange="LoadDistrict(this);">
+                            <option>Select Province</option>
+                        </select>
+                        <br />
+                        <select id="District" class="pc form-control district">
+                            <option>Select District</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="Save" onclick="Save();">Save</button>
+                    <button type="button" class="btn btn-primary" id="Update" onclick="Update();">Update</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*<div class="modal fade" id="myModalUpdateId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">Employee Form</h4>
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="Id">Id</label>
+                            <input type="text" class="form-control" id="IdUpdate" placeholder="Id" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Email">Email</label>
+                            <input type="email" class="form-control" id="EmailUpdate" placeholder="Email" disabled="disabled" />
+                        </div>
+                        <div class="form-group" hidden="hidden">
+                            <label for="FirstName">First Name</label>
+                            <input type="text" class="form-control" id="FirstNameUpdate" placeholder="First Name" />
+                        </div>
+                        <div class="form-group" hidden="hidden">
+                            <label for="LastName">Last Name</label>
+                            <input type="text" class="form-control" id="LastNameUpdate" placeholder="Last Name" />
+                        </div>
+                        <div class="form-group" hidden="hidden">
+                            <label for="Email">Email</label>
+                            <input type="email" class="form-control" id="EmailUpdate" placeholder="Email" />
+                        </div>
+                        <div class="form-group" hidden="hidden">
+                            <label for="Hiring_Location">Hiring Location</label>
+                            <input type="text" class="form-control" id="Hiring_LocationUpdate" placeholder="Hiring Location" />
+                        </div>
+                        <div class="form-group" hidden="hidden">
+                            <label for="Phone">Phone</label>
+                            <div class="form-inline">
+                                <input type="number" class="form-control col-md-2" placeholder="+62" disabled="disabled" />
+                                <input type="text" class="form-control col-md-10" id="PhoneUpdate" onchange="ValidatePhone();" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="Update" onclick="ValidateUpdate();">Update</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+</body>
+</html>
+
+@section scripts {
+    <script src="~/js/jqueryui/jquery-ui.js"></script>
+    <link href="~/js/jqueryui/jquery-ui.css" rel="stylesheet" />
+    <script src="~/plugins/select2/dist/js/select2.min.js"></script>
+    <link href="~/plugins/select2/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="~/js/datatables/jquery.dataTables.min.js"></script>
+    <link href="https://github.com/BlackrockDigital/startbootstrap-sb-admin-2/blob/6b5d5953b67dbe830fee993de3693dc437078a8d/vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet" />
+    <script src="~/js/sweetalert2/sweetalert2@8.js"></script>
+    <script src="~/js/moment/moment.js"></script>
+    <script src="~/Script/CustomerMaster/CustomerScript.js"></script>
+    <link href="~/css/uploaddownload.css" rel="stylesheet" />
+}
+
+
+

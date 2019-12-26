@@ -1,0 +1,63 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdministrator.cshtml";
+}
+
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <div id="login">
+        <div class="container">
+            <div id="login-row" class="row justify-content-center align-items-center">
+                <div id="login-column" class="col-md-6">
+                    <div id="login-box" class="col-md-12">
+                        @*<form id="login-form" class="form" action="" method="post"></form>*@
+                        <h3 class="text-center text-info">Change Password</h3>
+                        <div class="search" hidden="hidden">
+                            <span class="fa fa-eye-slash btnshow1"></span>
+                            <input class="input-field pwd1" name="token" id="token" type="text" placeholder="Token">
+                        </div>
+                        <div class="search">
+                            <span class="fa fa-eye-slash btnshow1"></span>
+                            <input class="input-field pwd1" name="OldPassword" id="OldPassword" type="password" placeholder="Old Password">
+                        </div>
+                        <div class="search" style="margin-top:30px">
+                            <span class="fa fa-eye-slash btnshow2"></span>
+                            <input class="input-field pwd2" name="Newpassword" id="Newpassword" type="password" placeholder="New Password">
+                        </div>
+
+                        <div class="search" style="margin-top:30px">
+                            <span class="fa fa-eye-slash btnshow3"></span>
+                            <input class="input-field pwd3" name="confirmpassword" id="confirmpassword" type="password" placeholder="Confirm Password">
+                        </div>
+                        <div class="container-login100-form-btn p-t-10">
+                            <button type="submit" id="submit" class="btn btn-primary" onclick="ChangePassword();">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@section scripts {
+    <script src="~/js/jqueryui/jquery-ui.js"></script>
+    <link href="~/js/jqueryui/jquery-ui.css" rel="stylesheet" />
+    <script src="~/js/datatables/jquery.dataTables.min.js"></script>
+    <link href="~/js/datatables/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/js/sweetalert2/sweetalert2@8.js"></script>
+    <script src="~/js/moment/moment.js"></script>
+    <script src="~/Script/ChangePasswordMaster/ChangePasswordScript.js"></script>
+    <link href="~/css/uploaddownload.css" rel="stylesheet" />
+    <link href="~/css/passwordField.css" rel="stylesheet" />
+
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+}

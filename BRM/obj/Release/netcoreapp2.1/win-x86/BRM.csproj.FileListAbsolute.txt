@@ -1,0 +1,7 @@
+C:\Users\NaufalAj\Documents\Git\BRM-putra\BRM\obj\Release\netcoreapp2.1\win-x86\BRM.csprojAssemblyReference.cache
+C:\Users\NaufalAj\Documents\Git\BRM-putra\BRM\obj\Release\netcoreapp2.1\win-x86\BRM.csproj.CoreCompileInputs.cache
+C:\Users\NaufalAj\Documents\Git\BRM-putra\BRM\obj\Release\netcoreapp2.1\win-x86\BRM.RazorAssemblyInfo.cache
+C:\Users\NaufalAj\Documents\Git\BRM-putra\BRM\obj\Release\netcoreapp2.1\win-x86\BRM.RazorAssemblyInfo.cs
+C:\Users\NaufalAj\Documents\Git\BRM-putra\BRM\obj\Release\netcoreapp2.1\win-x86\UserSecretsAssemblyInfo.cs
+C:\Users\NaufalAj\Documents\Git\BRM-putra\BRM\obj\Release\netcoreapp2.1\win-x86\BRM.AssemblyInfoInputs.cache
+C:\Users\NaufalAj\Documents\Git\BRM-putra\BRM\obj\Release\netcoreapp2.1\win-x86\BRM.AssemblyInfo.cs

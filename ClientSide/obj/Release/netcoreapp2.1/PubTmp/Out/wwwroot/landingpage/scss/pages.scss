@@ -1,0 +1,174 @@
+/*
+Template Name: Monster Admin
+Author: Themedesigner
+Email: niravjoshi87@gmail.com
+File: scss
+*/
+
+
+/*============================================================== 
+ For all pages 
+ ============================================================== */
+
+#main-wrapper {
+    width: 100%;
+}
+
+.page-wrapper {
+    background: $bodycolor;
+    
+}
+
+.container-fluid {
+    padding: 25px 15px 0 15px;
+}
+
+.display-7 {
+    font-size: 30px;
+    font-weight: 500;
+}
+
+
+/*============================================================== 
+ Index page 
+ ============================================================== */
+
+.topheader {
+    padding: 15px 0px;
+    background: $white;
+}
+
+.topheader .stylish-nav {
+    .nav-link {
+        padding: .5rem 20px;
+    }
+}
+
+.banner-text {
+    padding: 10px 0 0 0;
+    text-align: center;
+    h1 {
+        font-size: 32px;
+        font-weight: 500;
+        line-height: 42px;  
+    }
+    .subtext {
+        line-height: 27px;
+        margin: 30px 0;
+    }
+    .down-btn {
+        .btn {
+            padding: 13px 30px;
+            margin: 5px 10px;
+            font-size: 16px;
+            min-width: 200px;
+        }
+    }
+}
+
+.light-blue {
+    background: $extra-light;
+    padding: 80px 0;
+}
+
+.white-space {
+    background: $white;
+    padding: 80px 0;
+}
+
+.image-box {
+    position: relative;
+    .image-overly {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0px;
+        display: none;
+        padding-top: 30%;
+        background: rgba(255, 255, 255, 0.8);
+    }
+    &:hover .image-overly {
+        display: block;
+    }
+}
+
+.icon-section {
+    h4 {
+        margin-top: 30px;
+        margin-bottom: 15px;
+    }
+}
+
+.dual-bg {
+    padding: 80px 0 0 0;
+}
+
+.testimonial-text {
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-size: 17px;
+    line-height: 34px;
+}
+
+.call-to-action {
+    padding: 28px 0;
+    overflow: hidden;
+    span {
+        color: $white;
+        font-weight: 500;
+        font-size: 24px;
+        padding-top: 5px;
+    }
+    .buy-btn,
+    .suggest-btn {
+        background: none;
+        border: 2px solid $white;
+        padding: 12px 30px;
+        color: $white;
+        margin-left: 10px;
+        &:hover {
+            color: $bodytext;
+            background: $white;
+            opacity: 1;
+        }
+    }
+}
+
+ul.list-icons {
+    margin: 0px;
+    padding: 0px;
+    li {
+        list-style: none;
+        line-height: 40px;
+        a{
+            color:#8f9aa5;
+            &:hover{
+                color:$white;
+            }
+            i {
+                font-size: 12px;
+                margin-right: 5px;
+            }
+        }
+        
+    }
+}
+
+.footer{
+    padding: 80px 0 30px;
+    background: $inverse;
+    color:#8f9aa5;
+}
+.footer .sub-footer {
+    margin-top: 60px;
+    border-top: 1px solid $border;
+    padding: 30px 0 0;
+}
+.dropdown{
+    &:hover{
+        .dropdown-menu{
+            display: block;
+        }
+    }
+}

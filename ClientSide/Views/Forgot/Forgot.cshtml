@@ -1,0 +1,92 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdministrator.cshtml";
+}
+
+<html>
+
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Forgot Password</title>
+</head>
+
+
+<body>
+    <div>
+
+        <center>
+            <div class="wrap-input100 validate-input m-b-10" data-validate="Email">
+                <input class="email" type="text" name="Email" id="email" placeholder="Email">
+                @*Html.TextBoxFor(model => model.Email)*@
+                <span class="focus-input100"></span>
+                <span class="symbol-input100">
+                    <i class="fa fa-lock"></i>
+                </span>
+            </div>
+            <div>
+                @*<input color="green" type="submit" value="Send" />*@
+                <button type="button" class="btn btn-primary" id="Send" onclick="forgotPassword();">Send</button>
+
+            </div>
+
+        </center>
+
+    </div>
+</body>
+</html>
+
+
+
+@*@using (Html.BeginForm())
+    {
+        <div class="form-horizontal">
+            <hr />
+            <div class="text-success">
+                @ViewBag.Message
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Email</label>
+                @Html.TextBox("Email", "", new { @class = "form--control" })
+
+            </div>
+            <div class="form-group">
+                <div class="ccl-md-offset-2 col-md-10">
+                    <input type"submit" value="Submit" class="btn btn-success" />
+                </div>
+            </div>
+
+
+        </div>
+    }*@
+@*<div class="form-horizontal">
+        <hr />
+        <div class="text-success">
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2"></label>
+
+        </div>
+        <div class="form-group">
+            <div class="ccl-md-offset-2 col-md-10">
+                <input type"submit" value="Submit" class="btn btn-success" />
+            </div>
+        </div>
+
+
+    </div>*@
+
+
+@section scripts {
+    <script src="~/js/jqueryui/jquery-ui.js"></script>
+    <link href="~/js/jqueryui/jquery-ui.css" rel="stylesheet" />
+    <script src="~/plugins/select2/dist/js/select2.min.js"></script>
+    <link href="~/plugins/select2/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="~/js/datatables/jquery.dataTables.min.js"></script>
+    <link href="https://github.com/BlackrockDigital/startbootstrap-sb-admin-2/blob/6b5d5953b67dbe830fee993de3693dc437078a8d/vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet" />
+    <script src="~/js/sweetalert2/sweetalert2@8.js"></script>
+    <script src="~/js/moment/moment.js"></script>
+    <script src="~/Script/ForgotMaster/ForgotJavaScript.js"></script>
+    <link href="~/css/uploaddownload.css" rel="stylesheet" />
+}

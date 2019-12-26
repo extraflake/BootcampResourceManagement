@@ -1,0 +1,240 @@
+﻿<html lang="zxx" class="no-js">
+<head>
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="~/plugins/crafted/img/fav.png">
+    <!-- Author Meta -->
+    <meta name="author" content="colorlib">
+    <!-- Meta Description -->
+    <meta name="description" content="">
+    <!-- Meta Keyword -->
+    <meta name="keywords" content="">
+    <!-- meta character set -->
+    <meta charset="UTF-8">
+    <!-- Site Title -->
+    <title>BRM</title>
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700|Roboto:400,400i,500" rel="stylesheet">
+    <!--
+            CSS
+            ============================================= -->
+    <link href="~/plugins/crafted/css/linearicons.css" rel="stylesheet" />
+    <link href="~/plugins/crafted/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/plugins/crafted/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/plugins/crafted/css/magnific-popup.css" rel="stylesheet" />
+    <link href="~/plugins/crafted/css/hexagons.min.css" rel="stylesheet" />
+    <link href="~/plugins/crafted/css/nice-select.css" rel="stylesheet" />
+    <link href="~/plugins/crafted/css/main.css" rel="stylesheet" />
+</head>
+<body>
+    @RenderBody();
+
+    <script src="~/plugins/crafted/js/vendor/jquery-2.2.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+            crossorigin="anonymous"></script>
+    <script src="~/plugins/crafted/js/vendor/bootstrap.min.js"></script>
+    <script src="~/plugins/crafted/js/jquery.ajaxchimp.min.js"></script>
+    <script src="~/plugins/crafted/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/plugins/crafted/js/parallax.min.js"></script>
+    <script src="~/plugins/crafted/js/owl.carousel.min.js"></script>
+    <script src="~/plugins/crafted/js/jquery.nice-select.min.js"></script>
+    <script src="~/plugins/crafted/js/jquery.sticky.js"></script>
+    <script src="~/plugins/crafted/js/hexagons.min.js"></script>
+    <script src="~/plugins/crafted/js/jquery.counterup.min.js"></script>
+    <script src="~/plugins/crafted/js/waypoints.min.js"></script>
+    <script src="~/plugins/crafted/js/main.js"></script>
+    <script src="~/plugins/sweetalert2/sweetalert2@8.js"></script>
+    <script src="~/Script/UserAccessMaster/LoginScript.js"></script>
+    <style>
+        body {
+            margin: 0;
+            color: #6a6f8c;
+            background: #ffffff;
+            font: 600 16px/18px 'Open Sans',sans-serif;
+        }
+
+        *, :after, :before {
+            box-sizing: border-box
+        }
+
+        .clearfix:after, .clearfix:before {
+            content: '';
+            display: table
+        }
+
+        .clearfix:after {
+            clear: both;
+            display: block
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        .login-wrap {
+            width: 100%;
+            margin: auto;
+            max-width: 525px;
+            min-height: 670px;
+            position: relative;
+            background: url(https://s3-ap-southeast-1.amazonaws.com/xwork-bucket/buildings/images/238/APL%20Tower.jpg) center space;
+            box-shadow: 0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
+        }
+
+        .login-html {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            padding: 90px 70px 50px 70px;
+            background: rgba(169, 169, 169, .8);
+        }
+
+            .login-html .sign-in-htm,
+            .login-html .sign-up-htm {
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                position: absolute;
+                transform: rotateY(180deg);
+                backface-visibility: hidden;
+                transition: all .4s linear;
+            }
+
+            .login-html .sign-in,
+            .login-html .sign-up,
+            .login-form .group .check {
+                display: none;
+            }
+
+            .login-html .tab,
+            .login-form .group .label,
+            .login-form .group .button {
+                text-transform: uppercase;
+            }
+
+            .login-html .tab {
+                font-size: 22px;
+                margin-right: 15px;
+                padding-bottom: 5px;
+                margin: 0 15px 10px 0;
+                display: inline-block;
+                border-bottom: 2px solid transparent;
+            }
+
+            .login-html .sign-in:checked + .tab,
+            .login-html .sign-up:checked + .tab {
+                color: #fff;
+                border-color: #ffffff;
+            }
+
+        .login-form {
+            min-height: 345px;
+            position: relative;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+
+            .login-form .group {
+                margin-bottom: 15px;
+            }
+
+                .login-form .group .label,
+                .login-form .group .input,
+                .login-form .group .button {
+                    width: 100%;
+                    color: #fff;
+                    display: block;
+                }
+
+                .login-form .group .input,
+                .login-form .group .button {
+                    border: none;
+                    padding: 15px 20px;
+                    border-radius: 25px;
+                    background: rgba(255,255,255,.1);
+                }
+
+                .login-form .group input[data-type="password"] {
+                    text-security: circle;
+                    -webkit-text-security: circle;
+                }
+
+                .login-form .group .label {
+                    color: #fff;
+                    font-size: 12px;
+                }
+
+                .login-form .group .button {
+                    background: rgba(127, 255, 212, .5);
+                }
+
+                .login-form .group label .icon {
+                    width: 15px;
+                    height: 15px;
+                    border-radius: 2px;
+                    position: relative;
+                    display: inline-block;
+                    background: rgba(255,255,255,.1);
+                }
+
+                    .login-form .group label .icon:before,
+                    .login-form .group label .icon:after {
+                        content: '';
+                        width: 10px;
+                        height: 2px;
+                        background: #fff;
+                        position: absolute;
+                        transition: all .2s ease-in-out 0s;
+                    }
+
+                    .login-form .group label .icon:before {
+                        left: 3px;
+                        width: 5px;
+                        bottom: 6px;
+                        transform: scale(0) rotate(0);
+                    }
+
+                    .login-form .group label .icon:after {
+                        top: 6px;
+                        right: 0;
+                        transform: scale(0) rotate(0);
+                    }
+
+                .login-form .group .check:checked + label {
+                    color: #fff;
+                }
+
+                    .login-form .group .check:checked + label .icon {
+                        background: rgba(127, 255, 212, .5);
+                    }
+
+                        .login-form .group .check:checked + label .icon:before {
+                            transform: scale(1) rotate(45deg);
+                        }
+
+                        .login-form .group .check:checked + label .icon:after {
+                            transform: scale(1) rotate(-45deg);
+                        }
+
+        .login-html .sign-in:checked + .tab + .sign-up + .tab + .login-form .sign-in-htm {
+            transform: rotate(0);
+        }
+
+        .login-html .sign-up:checked + .tab + .login-form .sign-up-htm {
+            transform: rotate(0);
+        }
+
+        .hr {
+            height: 2px;
+            margin: 60px 0 50px 0;
+            background: white;
+        }
+
+        .foot-lnk {
+            text-align: center;
+        }
+    </style>
+</body>
+</html>

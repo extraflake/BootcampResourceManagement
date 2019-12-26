@@ -1,0 +1,132 @@
+﻿@{ 
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<div class="side_menu">
+    <div class="logo">
+        <a href="index.html">
+            <img src="~/plugins/crafted/img/logo.png" alt="">
+        </a>
+    </div>
+    <ul class="list menu-left">
+        <li>
+            <a href="index.html">Home</a>
+        </li>
+        <li>
+            <a href="about-us.html">About</a>
+        </li>
+        <li>
+            <a href="service.html">Service</a>
+        </li>
+        <li>
+            <div class="dropdown">
+                <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                    Projects
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="project.html">Project</a>
+                    <a class="dropdown-item" href="project-details.html">Project Details</a>
+                </div>
+            </div>
+        </li>
+        <li>
+            <a href="team.html">Team</a>
+        </li>
+        <li>
+            <div class="dropdown">
+                <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                    Pages
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="elements.html">Elements</a>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="dropdown">
+                <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                    Blog
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="blog.html">Blog</a>
+                    <a class="dropdown-item" href="single-blog.html">Blog Details</a>
+                </div>
+            </div>
+        </li>
+        <li>
+            <a href="contact.html">Contact</a>
+        </li>
+    </ul>
+</div>
+<!--================ End Offcanvus Menu Area =================-->
+<!--================ Canvus Menu Area =================-->
+<!--================ End Canvus Menu Area =================-->
+<!--================ start banner Area =================-->
+<section class="home-banner-area">
+    <div class="container">
+        <div class="row justify-content-end fullscreen">
+            <div class="col-lg-6 col-md-12 home-banner-left d-flex fullscreen align-items-center">
+                <div>
+                    <h1 class="">
+                        Welcome<br>
+                        <span style="color:lightseagreen">Bootcamp Resource Management</span> <br>
+                    </h1>
+                    <p class="mx-auto mb-40">
+                        Manage Bootcamp Data more easily, safely and quickly.
+                    </p>
+                    <a href="#" class="primary-btn" data-toggle="modal" data-target="#myModal" onclick="ClearScreen();">Sign In</a>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12 no-padding home-banner-right d-flex fullscreen align-items-end">
+                <img class="img-fluid" src="~/plugins/crafted/img/header-img.png" alt="">
+            </div>
+        </div>
+    </div>
+</section>
+<!--================ End banner Area =================-->
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="login-wrap">
+                    <div class="login-html">
+                        <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab" style="text-align:center">Sign In</label>
+                        <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab" hidden="hidden">Sign Up</label>
+                        <div class="login-form">
+                            <div class="sign-in-htm">
+                                <br />
+                                <br />
+                                <div class="group">
+                                    <label for="user" class="label">Username</label>
+                                    <input id="user" type="text" class="input">
+                                </div>
+                                <div class="group">
+                                    <label for="pass" class="label" style="color:white">Password</label>
+                                    <input id="pass" type="password" class="input" data-type="password">
+                                </div>
+                                <div class="group">
+                                    <input id="check" type="checkbox" class="check" checked>
+                                    <label for="check"><span class="icon"></span> Keep me Signed in</label>
+                                </div>
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+
+                                <div class="group">
+                                    <input type="submit" class="button" value="Sign In" id="Sign_In" onclick="Validate()">
+                                </div>
+                                <div class="foot-lnk">
+                                    <a asp-controller="Forgot" asp-action="Forgot" style="color:white">Forgot Password?</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

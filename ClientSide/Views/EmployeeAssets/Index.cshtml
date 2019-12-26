@@ -1,0 +1,102 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdministrator.cshtml";
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item bold"><a href="@Url.Action(" Index","Home")"><b><font size="5">Home</font></b></a></li>
+                <li class="breadcrumb-item active"><font size="5">History Asset</font></li>
+            </ol>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="upload-btn-wrapper">
+                    <button type="button" id="Create" class="btn right fa fa-plus-circle btn-add" data-toggle="modal" data-target="#myModal" onclick="ClearScreen();"></button>
+                </div>
+            </div>
+        </div>
+        <br />
+        <table class="table table-hover" id="table">
+            <thead>
+                <tr>
+                    <th style="background-color:#009efb;color:white;text-align:center">
+                        Action
+                    </th>
+                    <th style="background-color:#009efb;color:white;text-align:center">
+                        No.
+                    </th>
+                    <th style="background-color:#009efb;color:white;text-align:center">
+                        Asset
+                    </th>
+                    <th style="background-color:#009efb;color:white;text-align:center">
+                        Employee
+                    </th>
+                    <th style="background-color:#009efb;color:white;text-align:center">
+                        Receive Date
+                    </th>
+                    <th style="background-color:#009efb;color:white;text-align:center">
+                        Return Date
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="tbody"></tbody>
+        </table>
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Current Asset Form</h4>
+                </div>
+                <div class="form-group">
+                    <label for="Type">Type</label>
+                    <select id="Type" class="pc form-control">
+                        <option>Select Type</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="Id">Id</label>
+                    <input type="text" class="form-control" id="Id" placeholder="Id" />
+                </div>
+                <div class="form-group">
+                    <label for="Employee">Employee</label>
+                    <select id="Employee" class="pc form-control">
+                        <option>Select Employee</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="Number">Number</label>
+                    <input type="text" class="form-control" id="Number" placeholder="Number" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="Save" onclick="Save();">Add</button>
+                    <button type="button" class="btn btn-primary" id="Update" onclick="Edit();">Update</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@section scripts {
+<script src="~/js/jqueryui/jquery-ui.js"></script>
+<link href="~/js/jqueryui/jquery-ui.css" rel="stylesheet" />
+<script src="~/js/datatables/jquery.dataTables.min.js"></script>
+<link href="https://github.com/BlackrockDigital/startbootstrap-sb-admin-2/blob/6b5d5953b67dbe830fee993de3693dc437078a8d/vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet" />
+<script src="~/js/sweetalert2/sweetalert2@8.js"></script>
+<script src="~/js/moment/moment.js"></script>
+<script src="~/Script/EmployeeAssetMaster/EmployeeAssetScript.js"></script>
+<link href="~/css/uploaddownload.css" rel="stylesheet" />
+}
+
+
