@@ -8,8 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="~/images/favicon.png">
-    <title>Bootcamp Resource Management</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="~/images/favicon.png" />
     <!-- Bootstrap Core CSS -->
     <link href="~/plugins/jqueryui/jquery-ui.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
@@ -106,12 +105,28 @@
                         <!-- This is the navigation menu -->
                         <div class="collapse navbar-collapse" id="navbarNavDropdown">
                             <ul class="navbar-nav ml-auto stylish-nav">
-                                <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","Dashboard")"><b>Dashboard</b></a> </li>
-                                <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","Employees")"><b>Participants</b></a> </li>
-                                <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","BatchClasses")"><b>Class</b></a> </li>
-                                <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","Assets")"><b>Asset</b></a> </li>
-                                <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","Placements")"><b>Placement</b></a> </li>
-                                <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","InterviewHistories")"><b>Interview</b></a> </li>
+                                @{
+                                    if (Context.Session.GetString("role").Equals("ROLE_SUPER_ADMIN"))
+                                    {
+                                        <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","Dashboard")"><b>Dashboard</b></a> </li>
+                                        <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","Employees")"><b>Participants</b></a> </li>
+                                        <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","BatchClasses")"><b>Class</b></a> </li>
+                                        <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","Assets")"><b>Asset</b></a> </li>
+                                        <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","Placements")"><b>Placement</b></a> </li>
+                                        <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","InterviewHistories")"><b>Interview</b></a> </li>
+                                    }
+                                    else if (Context.Session.GetString("role").Contains("_MAN"))
+                                    {
+                                        <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","Dashboard")"><b>Dashboard</b></a> </li>
+                                        <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","Employees")"><b>Participants</b></a> </li>
+                                    }
+                                    else if (Context.Session.GetString("role").Contains("_RM"))
+                                    {
+                                        <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","Dashboard")"><b>Dashboard</b></a> </li>
+                                        <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","Placements")"><b>Placement</b></a> </li>
+                                        <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","InterviewHistories")"><b>Interview</b></a> </li>
+                                    }
+                                }
                             </ul>
                         </div>
                     </nav>
@@ -210,17 +225,14 @@
             <footer class="footer">
                 © @DateTime.Now.Year Bootcamp Resource Management
             </footer>
-
             <!-- ============================================================== -->
             <!-- End footer -->
             <!-- ============================================================== -->
         </div>
-
         <!-- ============================================================== -->
         <!-- End Page wrapper  -->
         <!-- ============================================================== -->
     </div>
-
     <!-- ============================================================== -->
     <!-- End Wrapper -->
     <!-- ============================================================== -->
@@ -244,7 +256,6 @@
     <script src="~/js/custom.min.js"></script>
     <script src="~/plugins/morrisjs/morris.js"></script>
     <script src="~/plugins/sweetalert2/sweetalert2@8.js"></script>
-    <script src="~/Script/UpdateTokenMaster/UpdateTokenScript.js"></script>
     <!-- ============================================================== -->
     <!-- Style switcher -->
     <!-- ============================================================== -->

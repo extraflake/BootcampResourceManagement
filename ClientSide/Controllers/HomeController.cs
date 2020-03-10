@@ -19,17 +19,33 @@ namespace ClientSide.Controllers
 
         public IActionResult Index()
         {
-            var a = HttpContext.Session.GetString("id");
-            var b = HttpContext.Session.GetString("name");
-            var c = HttpContext.Session.GetString("email");
-            var d = HttpContext.Session.GetString("role");
-            if (a != null && b != null && c != null && d != null)
+            var name = HttpContext.Session.GetString("name");
+            var email = HttpContext.Session.GetString("email");
+            var role = HttpContext.Session.GetString("role");
+            var Email = HttpContext.Session.GetString("Email");
+            var Role = HttpContext.Session.GetString("Role");
+            if (name != null && email != null && role != null)
             {
                 return RedirectToAction("Index", "Dashboard");
             }
             else
             {
                 return View();
+            }
+        }
+
+        public JsonResult CheckingSession()
+        {
+            var name = HttpContext.Session.GetString("name");
+            var email = HttpContext.Session.GetString("email");
+            var role = HttpContext.Session.GetString("role");
+            if (name != null && email != null && role != null)
+            {
+                return Json(new { available = "active" });
+            }
+            else
+            {
+                return Json(null);
             }
         }
 
@@ -88,16 +104,16 @@ namespace ClientSide.Controllers
                 readTask.Wait();
                 userCredential = readTask.Result;
                 // set session
-                HttpContext.Session.SetString("id", userCredential.Id);
                 HttpContext.Session.SetString("name", userCredential.Name);
                 HttpContext.Session.SetString("email", userCredential.Email);
                 HttpContext.Session.SetString("role", userCredential.Role);
             }
-            else
-            {
-                // try to find something
-            }
             return Json(result);
+        }
+
+        public IActionResult Unauthorize()
+        {
+            return View();
         }
     }
 }

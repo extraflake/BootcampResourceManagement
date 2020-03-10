@@ -14,7 +14,7 @@ namespace Data.Repositories.Interfaces
         IEnumerable<InterviewHistoryVM> GetVM();
         IEnumerable<InterviewHistoryVM> GetVMSort(string start, string end);
         InterviewHistoryVM GetVM(int id);
-        bool Insert(InsertInterviewHistoryVM insertInterviewHistoryVM);
+        List<SendEmailInterview> Insert(IList<InsertInterviewHistoryVM> insertInterviewHistoryVM);
         bool Update(int id, InsertInterviewHistoryVM interviewHistory);
         bool Delete(int id);
     }

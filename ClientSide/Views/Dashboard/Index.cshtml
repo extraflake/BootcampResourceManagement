@@ -3,7 +3,7 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_LayoutAdministrator.cshtml";
 }
-
+<title>Dashboard</title>
 <div class="page-wrapper">
     <!-- ============================================================== -->
     <!-- Container fluid  -->
@@ -12,45 +12,39 @@
         <!-- ============================================================== -->
         <!-- Bread crumb and right sidebar toggle -->
         <!-- ============================================================== -->
-        @*<div class="row page-titles">
-            <div class="col-md-6 col-4 align-self-center">
-                <button class="right-side-toggle waves-effect waves-light btn-info btn-circle btn-sm pull-right m-l-10"><i class="ti-settings text-white"></i></button>
-                <button class="btn pull-right hidden-sm-down btn-success"><i class="mdi mdi-plus-circle"></i> Create</button>
+        <div class="row page-titles">
+            <div class="col-md-12 col-4 align-self-center">
                 <div class="dropdown pull-right m-r-10 hidden-sm-down">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        January 2017
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">February 2017</a>
-                        <a class="dropdown-item" href="#">March 2017</a>
-                        <a class="dropdown-item" href="#">April 2017</a>
-                    </div>
+                    <label>Choose Year : </label>
+                    <select id="year" class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split" aria-haspopup="true"></select>
                 </div>
             </div>
-        </div>*@
+        </div>
         <div class="row">
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <button class="fa fa-cloud-download btn btn-down" id="downloadDistribution" onclick="location.href='@Url.Action("ExportDistribution", "Dashboard")'"></button>
+                        <button class="fa fa-cloud-download btn btn-down" id="downloadDistribution"></button>
                         <h4 class="card-title">Distribution</h4>
                         <div id="morris-donut-chart"></div>
+						<h4 id="morris-donut-no-data-found"></h4>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <button class="fa fa-cloud-download btn btn-down" id="downloadDistribution" onclick="location.href='@Url.Action("ExportUniversityLocation", "Dashboard")'"></button>
+                        <button class="fa fa-cloud-download btn btn-down" id="downloadUniversity"></button>
                         <h4 class="card-title">University Location</h4>
                         <div id="morris-donut-chart2"></div>
+						<h4 id="morris-donut2-no-data-found"></h4>
                     </div>
                 </div>
             </div>
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <button class="fa fa-cloud-download btn btn-down" id="downloadDistribution" onclick="location.href='@Url.Action("ExportPlanRealization", "Dashboard")'"></button>
+                        <button class="fa fa-cloud-download btn btn-down" id="downloadPlan"></button>
                         <h4 class="card-title">Plan & Realization</h4>
                         <ul class="list-inline text-right">
                             <li>
@@ -61,129 +55,208 @@
                             </li>
                         </ul>
                         <div id="morris-area-chart"></div>
+						<h4 id="morris-area-no-data-found"></h4>
                     </div>
                 </div>
             </div>
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <button class="fa fa-cloud-download btn btn-down" id="downloadDistribution" onclick="location.href='@Url.Action("ExportTopUniversity", "Dashboard")'"></button>
+                        <button class="fa fa-cloud-download btn btn-down" id="downloadTop"></button>
                         <h4 class="card-title">Top 10 University</h4>
                         <div id="morris-bar-chart"></div>
+						<h4 id="morris-no-data-found"></h4>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script src="~/plugins/jquery/jquery.min.js"></script>
-<script src="~/plugins/raphael/raphael-min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/wheelnav@1.7.1/js/dist/raphael.min.js"></script>
-<script src="~/plugins/morrisjs/morris.js"></script>
-<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
-<link href="~/css/uploaddownload.css" rel="stylesheet" />
-<script type="text/javascript">
-    $(document).ready(function () {
-		Graph();
-        Plan();
-        Top();
-        Hiring();
-    });
 
-    function Graph() {
-        $.ajax({
-            type: 'GET',
-            url: '/Dashboard/LoadDistribution/',
-            success: function (data) {
-                Morris.Donut({
-                    element: 'morris-donut-chart',
-                    data:
-                        $.each(JSON.parse(data), function (index, val) {
-                            [{
-                                label: val.label,
-                                value: val.value + '%'
-                            }]
-                        }),
-                    resize: true
-                });
-            }
-        });
-    }
+@section scripts {
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <script src="~/plugins/jqueryui/jquery-ui.js"></script>
+    <link href="~/plugins/jqueryui/jquery-ui.css" rel="stylesheet" />
+    <script src="~/lib/timepicker/jquery.datetimepicker.full.js"></script>
+    <link href="~/lib/timepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+    <script src="~/plugins/raphael/raphael-min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/wheelnav@1.7.1/js/dist/raphael.min.js"></script>
+    <script src="~/plugins/morrisjs/morris.js"></script>
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+    <link href="~/css/uploaddownload.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+			Hiring();
+            Top();
+			Graph();
+			Plan();
+			
+			$("#downloadDistribution").click(function () {
+				var year = $("#year").val();
+				Export("distribution", year);
+			});
+			
+			$("#downloadUniversity").click(function () {
+				var year = $("#year").val();
+				Export("university", year);
+			});
+			
+			$("#downloadPlan").click(function () {
+				var year = $("#year").val();
+				Export("plan", year);
+			});
+			
+			$("#downloadTop").click(function () {
+				var year = $("#year").val();
+				Export("top", year);
+			});
 
-    function Hiring() {
-        $.ajax({
-            type: 'GET',
-            url: '/Dashboard/LoadUniversityLocation/',
-            success: function (data) {
-                Morris.Donut({
-                    element: 'morris-donut-chart2',
-                    data:
-                        $.each(JSON.parse(data), function (index, val) {
-                            [{
-                                label: val.label,
-                                value: val.value
-                            }]
-                        }),
-                    resize: true
-                });
-            }
+            $("#year").change(function () {
+                Top();
+				Graph();
+				Hiring();
+				Plan();
+            })
         });
-    }
-
-    function Plan() {
-        $.ajax({
-            type: 'GET',
-            url: '/Dashboard/LoadPlanRealization/',
-            data: { param : "2019" },
-            success: function (data) {
-                Morris.Area({
-                    element: 'morris-area-chart',
-                    data:
-                        $.each(JSON.parse(data), function (index, val) {
-                            [{
-                                quantity: val.label,
-                                plan: val.value,
-                                start_date: val.start_date
-                            }]
-                        }),
-                    xkey: 'start_date',
-                    ykeys: ['plan', 'quantity'],
-                    labels: ['Plan', 'Realization'],
-                    pointSize: 3,
-                    fillOpacity: 0,
-                    pointStrokeColors: ['#55ce63', '#009efb'],
-                    behaveLikeLine: true,
-                    gridLineColor: '#e0e0e0',
-                    lineWidth: 3,
-                    hideHover: 'auto',
-                    lineColors: ['#55ce63', '#009efb'],
-                    resize: true
-                });
-            }
-        });
-    }
 	
-	function Top(){
-	    $.ajax({
-            type: 'GET',
-            url: '/Dashboard/LoadTopUniversity/',
-            success: function (data) {
-                debugger;
-                chart.setData(JSON.parse(data));
+        function Export(ekspor, year) {
+			if(ekspor == "distribution") {
+				window.location = '/Dashboard/ExportDistribution?year=' + year;
 			}
-		});
-    }
+			else if(ekspor == "university") {
+				window.location = '/Dashboard/ExportUniversityLocation?year=' + year;
+			}
+			else if(ekspor == "plan") {
+				window.location = '/Dashboard/ExportPlanRealization?year=' + year;
+			}
+			else {
+				window.location = '/Dashboard/ExportTopUniversity?year=' + year;
+			}
+		}
 
-    var chart = Morris.Bar({
-        // ID of the element in which to draw the chart.
-        element: 'morris-bar-chart',
-        // Set initial data (ideally you would provide an array of default data)
-        data: [0, 0],
-        xkey: 'label',
-        ykeys: ['value'],
-        labels: ['Quantity'],
-        resize: true
-    });    
+        var start = 2018;
+        var end = new Date().getFullYear();
+        var options = "";
+        for (var year = start; year <= end; year++) {
+            options += "<option>" + year + "</option>";
+        }
+        document.getElementById("year").innerHTML = options;
 
-    Top(chart);
-</script>
+        function Graph() {
+            $.ajax({
+                type: 'GET',
+                url: '/Dashboard/LoadDistribution/',
+                data: { param: $("#year").val() }
+            }).then((result) => {
+				if(result != "No Data Found") {
+					$("#morris-donut-chart").show();
+					$("#morris-donut-no-data-found").hide();
+					chartDonut.setData(JSON.parse(result));
+				}
+				else {
+					$("#morris-donut-chart").hide();
+					$("#morris-donut-no-data-found").show();
+					document.getElementById("morris-donut-no-data-found").innerHTML = "No Data Found";
+				}
+			});
+        }
+
+		var chartDonut = Morris.Donut({
+			element: 'morris-donut-chart',
+            data: [0, 0],
+			label: 'label',
+			value: 'value',
+			resize: true
+        });
+
+        function Hiring() {
+            $.ajax({
+                type: 'GET',
+                url: '/Dashboard/LoadUniversityLocation/',
+                data: { param: $("#year").val() }
+			}).then((result) => {
+				if(result != "No Data Found") {
+					$("#morris-donut-chart2").show();
+					$("#morris-donut2-no-data-found").hide();
+					chartDonut2.setData(JSON.parse(result));
+				}
+				else {
+					$("#morris-donut-chart2").hide();
+					$("#morris-donut2-no-data-found").show();
+					document.getElementById("morris-donut2-no-data-found").innerHTML = "No Data Found";
+				}
+			});
+        }
+
+		var chartDonut2 = Morris.Donut({
+			element: 'morris-donut-chart2',
+			data: [0, 0],
+			label: 'label',
+			value: 'value',
+			resize: true
+        });
+
+        function Plan() {
+            $.ajax({
+                type: 'GET',
+                url: '/Dashboard/LoadPlanRealization/',
+                data: { param: $("#year").val() }
+			}).then((result) => {
+				if(result != "No Data Found") {
+					$("#morris-area-chart").show();
+					$("#morris-area-no-data-found").hide();
+                    chartArea.setData(JSON.parse(result));
+				} else {
+					$("#morris-area-chart").hide();
+					$("#morris-area-no-data-found").show();
+					document.getElementById("morris-area-no-data-found").innerHTML = "No Data Found";
+				}
+			});
+        }
+
+		var chartArea = Morris.Area({
+			element: 'morris-area-chart',
+			xkey: 'start_date',
+            ykeys: ['plan', 'quantity'],
+            labels: ['Plan', 'Realization'],
+			pointSize: 3,
+            fillOpacity: 0,
+			pointStrokeColors: ['#55ce63', '#009efb'],
+            behaveLikeLine: true,
+            gridLineColor: '#e0e0e0',
+            lineWidth: 3,
+            hideHover: 'auto',
+            lineColors: ['#55ce63', '#009efb'],
+            resize: true
+        });
+
+        function Top() {
+            $.ajax({
+                type: 'GET',
+                url: '/Dashboard/LoadTopUniversity/',
+                data: { param: $("#year").val() }
+            }).then((result) => {
+                if (result != "No Data Found") {
+					$("#morris-bar-chart").show();
+					$("#morris-no-data-found").hide();
+                    chart.setData(JSON.parse(result));
+                }
+				else {
+					$("#morris-bar-chart").hide();
+					$("#morris-no-data-found").show();
+					document.getElementById("morris-no-data-found").innerHTML = "No Data Found";
+				}
+            });
+        }
+
+        var chart = Morris.Bar({
+            element: 'morris-bar-chart',
+            data: [0, 0],
+            xkey: 'label',
+            ykeys: ['value'],
+            labels: ['Quantity'],
+            resize: true
+        });
+
+    </script>
+}

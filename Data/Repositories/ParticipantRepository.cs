@@ -3,9 +3,11 @@ using Data.Models;
 using Data.Repositories.Interfaces;
 using Data.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
 using Renci.SshNet;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 
@@ -70,6 +72,7 @@ namespace Data.Repositories
 
         public bool Insert(InsertParticipantVM insertParticipantVM)
         {
+            // try to break this
             for (int i = 0; i < insertParticipantVM.id.ToArray().Length; i++)
             {
                 string id = insertParticipantVM.id[i];
@@ -80,22 +83,49 @@ namespace Data.Repositories
                 }
                 else
                 {
-                    var participants = new Participant()
+                    //var participants = new Participant()
+                    //{
+                    //    id = insertParticipantVM.id[i],
+                    //    batch_class = insertParticipantVM.batch_class
+                    //};
+                    //_myContext.Participants.Add(participants);
+                    //var pullParticipant = _myContext.Employees.Find(participants.id);
+                    ////pullParticipant.is_participant = true;
+                    //_myContext.Entry(pullParticipant).State = EntityState.Modified;
+
+                    string connStr = "server=mejakerja.mysql.database.azure.com;user id=mejaadmin@mejakerja;password=M3tr0dat@P@s5;port=3306;persistsecurityinfo=True;database=db_brm;allowuservariables=True;Convert Zero Datetime='True'";
+                    try
                     {
-                        id = insertParticipantVM.id[i],
-                        batch_class = insertParticipantVM.batch_class
-                    };
-                    _myContext.Participants.Add(participants);
-                    var pullParticipant = _myContext.Employees.Find(participants.id);
-                    //pullParticipant.is_participant = true;
-                    _myContext.Entry(pullParticipant).State = EntityState.Modified;
+                        MySqlConnection conn = new MySqlConnection(connStr);
+                        conn.Open();
+                        MySqlCommand cmd = new MySqlCommand("tg_sp_insert_participant", conn)
+                        {
+                            CommandType = CommandType.StoredProcedure
+                        };
+                        cmd.Parameters.AddWithValue("@id", insertParticipantVM.id[i]);
+                        cmd.Parameters.AddWithValue("@bc", insertParticipantVM.batch_class);
+
+
+                        var resultInsert = cmd.ExecuteNonQuery();
+                        conn.Close();
+                        if (resultInsert > 0)
+                        {
+                            status = true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Write(ex.Message);
+                        throw;
+                    }
                 }
             }
-            var result = _myContext.SaveChanges();
-            if (result > 0)
-            {
-                status = true;
-            }
+            //var result = _myContext.SaveChanges();
+            //if (result > 0)
+            //{
+            //    status = true;
+            //}
+            
             return status;
         }
     }

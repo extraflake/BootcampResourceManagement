@@ -15,7 +15,7 @@ namespace BRM.Services
         IEnumerable<InterviewHistoryVM> GetVM();
         IEnumerable<InterviewHistoryVM> GetVMSort(string start, string end);
         InterviewHistoryVM GetVM(int id);
-        bool Insert(InsertInterviewHistoryVM insetInterviewHistoryVM);
+        List<SendEmailInterview> Insert(IList<InsertInterviewHistoryVM> insetInterviewHistoryVM);
         bool Update(int id, InsertInterviewHistoryVM interviewHistory);
         bool Delete(int id);
     }

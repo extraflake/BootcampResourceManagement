@@ -29,30 +29,15 @@ namespace ClientSide.Controllers
         [Route("Interviews")]
         public IActionResult Index()
         {
-            var a = HttpContext.Session.GetString("id");
-            var b = HttpContext.Session.GetString("name");
-            var c = HttpContext.Session.GetString("email");
-            var d = HttpContext.Session.GetString("role");
-            if (a != null && b != null && c != null && d != null)
+            var role = HttpContext.Session.GetString("role");
+            if (!string.IsNullOrWhiteSpace(role))
             {
-                if (d == "Trainer" || d == "Relation Manager")
+                if (role.Contains("_RM") || role.Contains("SUPER_ADMIN"))
                 {
-                    return View(LoadInterviewHistoryVM());
-                }
-                else
-                {
-                    return RedirectToAction("Index", "Home");
+                    return View(LoadInterviewHistory());
                 }
             }
-            else
-            {
-                HttpContext.Session.Remove("Id");
-                HttpContext.Session.Remove("Name");
-                HttpContext.Session.Remove("Email");
-                HttpContext.Session.Remove("Role");
-                HttpContext.Session.Clear();
-                return RedirectToAction("Index", "Home");
-            }
+            return RedirectToAction("unauthorize", "home", null);
         }
 
         public JsonResult LoadInterviewHistory()
@@ -190,13 +175,13 @@ namespace ClientSide.Controllers
             };
 
             var countemp = beforeInsertInterviewHistoryVM.employee.ToArray().Length;
-
+            IList<InsertInterviewHistoryVM> listInsert = new List<InsertInterviewHistoryVM>();
             for (int i = 0; i < countemp; i++)
             {
                 MyContext _myContext = new MyContext();
                 var emp = beforeInsertInterviewHistoryVM.employee[i].ToString();
                 var cus = beforeInsertInterviewHistoryVM.customer;
-                var get = _myContext.InterviewHistories.Where(x => x.employee == emp && x.customer == cus).ToList();
+                var get = _myContext.InterviewHistories.Where(x => x.employee == emp && x.customer == cus && x.department == beforeInsertInterviewHistoryVM.department && x.pic == beforeInsertInterviewHistoryVM.pic).ToList();
                 var getcustomer = beforeInsertInterviewHistoryVM.customer.ToString();
                 var getemployee = beforeInsertInterviewHistoryVM.employee.ToString();
                 var getcount = get.Count;
@@ -210,22 +195,22 @@ namespace ClientSide.Controllers
                         note = beforeInsertInterviewHistoryVM.note,
                         customer = beforeInsertInterviewHistoryVM.customer,
                         department = beforeInsertInterviewHistoryVM.department,
-                        create_by = beforeInsertInterviewHistoryVM.create_by,
+                        create_by = HttpContext.Session.GetString("name"),
                         create_datetime = beforeInsertInterviewHistoryVM.create_datetime,
                         update_by = beforeInsertInterviewHistoryVM.update_by,
                         update_datetime = beforeInsertInterviewHistoryVM.update_datetime
                     };
-
-                    var myContent = JsonConvert.SerializeObject(insert);
-                    var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
-                    var byteContent = new ByteArrayContent(buffer);
-                    byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                    var result = client.PutAsync("InterviewHistories/InsertInterviewHistory", byteContent).Result;
-                    var rest = result.StatusCode.ToString();
-                    if (rest == "OK" || rest == "200")
-                    {
-                        counter++;
-                    }
+                    listInsert.Add(insert);
+                    //var myContent = JsonConvert.SerializeObject(insert);
+                    //var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+                    //var byteContent = new ByteArrayContent(buffer);
+                    //byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    //var result = client.PutAsync("InterviewHistories/InsertInterviewHistory", byteContent).Result;
+                    //var rest = result.StatusCode.ToString();
+                    //if (rest == "OK" || rest == "200")
+                    //{
+                    //    counter++;
+                    //}
                 }
                 else
                 {
@@ -240,7 +225,7 @@ namespace ClientSide.Controllers
                             InsertInterviewHistoryVM insert = new InsertInterviewHistoryVM()
                             {
                                 employee = beforeInsertInterviewHistoryVM.employee[i].ToString(),
-                                interview_datetime = beforeInsertInterviewHistoryVM.interview_datetime,
+                                interview_datetime = Convert.ToDateTime(Convert.ToDateTime(beforeInsertInterviewHistoryVM.interview_datetime).ToLongDateString()),
                                 pic = beforeInsertInterviewHistoryVM.pic,
                                 note = beforeInsertInterviewHistoryVM.note,
                                 customer = beforeInsertInterviewHistoryVM.customer,
@@ -250,19 +235,31 @@ namespace ClientSide.Controllers
                                 update_by = beforeInsertInterviewHistoryVM.update_by,
                                 update_datetime = beforeInsertInterviewHistoryVM.update_datetime
                             };
-                            var myContent = JsonConvert.SerializeObject(insert);
-                            var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
-                            var byteContent = new ByteArrayContent(buffer);
-                            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                            var result = client.PutAsync("InterviewHistories/InsertInterviewHistory", byteContent).Result;
-                            var rest = result.StatusCode.ToString();
-                            if (rest == "OK" || rest == "200")
-                            {
-                                counter++;
-                            }
+                            listInsert.Add(insert);
+                            //var myContent = JsonConvert.SerializeObject(insert);
+                            //var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+                            //var byteContent = new ByteArrayContent(buffer);
+                            //byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                            //var result = client.PutAsync("InterviewHistories/InsertInterviewHistory", byteContent).Result;
+                            //var rest = result.StatusCode.ToString();
+                            //if (rest == "OK" || rest == "200")
+                            //{
+                            //    counter++;
+                            //}
                         }
                     }
                 }
+            }
+            var serialize = listInsert.ToArray();
+            var myContent = JsonConvert.SerializeObject(serialize);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+            var byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var result = client.PutAsync("InterviewHistories/InsertInterviewHistory", byteContent).Result;
+            var rest = result.StatusCode.ToString();
+            if (rest == "OK" || rest == "200")
+            {
+                counter++;
             }
             return Json(counter);
         }

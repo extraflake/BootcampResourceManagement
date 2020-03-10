@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Data.Context;
 using Data.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -25,40 +26,76 @@ namespace ClientSide.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var role = HttpContext.Session.GetString("role");
+            if (!string.IsNullOrWhiteSpace(role))
+            {
+                if (role.Contains("_MAN") || role.Contains("SUPER_ADMIN") || role.Contains("_RM"))
+                {
+                    return View();
+                }
+            }
+            return RedirectToAction("unauthorize", "home", null);
         }
 
-        public JsonResult LoadDistribution()
+        public JsonResult LoadDistribution(int param)
         {
-            var get = myContext.DistributionVM.FromSql($"call sp_retrieve_report_distribution({DateTime.Now.Year})").ToList();
-            jsonDistribution = JsonConvert.SerializeObject(get, Formatting.Indented);
-            return Json(jsonDistribution);
+            var get = myContext.DistributionVM.FromSql($"call sp_retrieve_report_distribution({param})").ToList();
+            if (!get.Count().Equals(0))
+            {
+                jsonDistribution = JsonConvert.SerializeObject(get, Formatting.Indented);
+                return Json(jsonDistribution);
+            }
+            else
+            {
+                return Json("No Data Found");
+            }
         }
 
         public JsonResult LoadTopUniversity(int param)
         {
-            var get = myContext.ReportUniversityTopVMs.FromSql($"call sp_retrieve_report_top_university({10},{2019})").ToList();
-            jsonUniversity = JsonConvert.SerializeObject(get, Formatting.Indented);
-            return Json(jsonUniversity);
+            var get = myContext.ReportUniversityTopVMs.FromSql($"call sp_retrieve_report_top_university({10},{param})").ToList();
+            if (!get.Count().Equals(0))
+            {
+                jsonUniversity = JsonConvert.SerializeObject(get, Formatting.Indented);
+                return Json(jsonUniversity);
+            }
+            else
+            {
+                return Json("No Data Found");
+            }
         }
 
         public JsonResult LoadPlanRealization(int param)
         {
-            var get = myContext.PlanRealizationVMs.FromSql($"call sp_retrieve_report_plan_realization({DateTime.Now.Year})").ToList();
-            jsonPlanRealization = JsonConvert.SerializeObject(get, Formatting.Indented);
-            return Json(jsonPlanRealization);
+            var get = myContext.PlanRealizationVMs.FromSql($"call sp_retrieve_report_plan_realization({param})").ToList();
+            if (!get.Count().Equals(0))
+            {
+                jsonPlanRealization = JsonConvert.SerializeObject(get, Formatting.Indented);
+                return Json(jsonPlanRealization);
+            }
+            else
+            {
+                return Json("No Data Found");
+            }
         }
 
         public JsonResult LoadUniversityLocation(int param)
         {
-            var get = myContext.reportBootcampQuantityVMs.FromSql($"call sp_retrieve_report_university_location({DateTime.Now.Year})").OrderByDescending(x => x.value).ToList();
-            jsonUniversityLocation = JsonConvert.SerializeObject(get, Formatting.Indented);
-            return Json(jsonUniversityLocation);
+            var get = myContext.reportBootcampQuantityVMs.FromSql($"call sp_retrieve_report_university_location({param})").OrderByDescending(x => x.value).ToList();
+            if (!get.Count().Equals(0))
+            {
+                jsonUniversityLocation = JsonConvert.SerializeObject(get, Formatting.Indented);
+                return Json(jsonUniversityLocation);
+            }
+            else
+            {
+                return Json("No Data Found");
+            }
         }
 
-        public ActionResult ExportDistribution()
+        public ActionResult ExportDistribution(string year)
         {
-            var result = myContext.DistributionReportVM.FromSql($"call sp_retrieve_export_distribution({DateTime.Now.Year})").ToList();
+            var result = myContext.DistributionReportVM.FromSql($"call sp_retrieve_export_distribution({year})").ToList();
             using (var excel = new ExcelPackage())
             {
                 var workSheet = excel.Workbook.Worksheets.Add("Distribution Report");
@@ -68,9 +105,9 @@ namespace ClientSide.Controllers
             }
         }
 
-        public ActionResult ExportTopUniversity()
+        public ActionResult ExportTopUniversity(string year)
         {
-            var result = myContext.TopTenReportVM.FromSql($"call sp_retrieve_export_top_university({10},{2019})").ToList();
+            var result = myContext.TopTenReportVM.FromSql($"call sp_retrieve_export_top_university({10},{year})").ToList();
             using (var excel = new ExcelPackage())
             {
                 var workSheet = excel.Workbook.Worksheets.Add("Top 10 University Report");
@@ -80,9 +117,9 @@ namespace ClientSide.Controllers
             }
         }
 
-        public ActionResult ExportPlanRealization()
+        public ActionResult ExportPlanRealization(string year)
         {
-            var result = myContext.PlanRealizationReportVM.FromSql($"call sp_retrieve_export_plan_realization({2019})").ToList();
+            var result = myContext.PlanRealizationReportVM.FromSql($"call sp_retrieve_export_plan_realization({year})").ToList();
             using (var excel = new ExcelPackage())
             {
                 var workSheet = excel.Workbook.Worksheets.Add("Plan & Realization Report");
@@ -92,9 +129,9 @@ namespace ClientSide.Controllers
             }
         }
 
-        public ActionResult ExportUniversityLocation()
+        public ActionResult ExportUniversityLocation(string year)
         {
-            var result = myContext.UnivLocationReportVM.FromSql($"call sp_retrieve_export_university_location({DateTime.Now.Year})").ToList();
+            var result = myContext.UnivLocationReportVM.FromSql($"call sp_retrieve_export_university_location({year})").ToList();
             using (var excel = new ExcelPackage())
             {
                 var workSheet = excel.Workbook.Worksheets.Add("University Location Report");

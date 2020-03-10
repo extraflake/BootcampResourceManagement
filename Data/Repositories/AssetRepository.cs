@@ -57,6 +57,8 @@ namespace Data.Repositories
             {
                 //var push = new Asset(asset.id, asset.number, asset.type, asset.employee);
                 //_myContext.Assets.Add(push);
+                //var result = _myContext.SaveChanges();
+                //return result > 0;
                 string connStr = "server=mejakerja.mysql.database.azure.com;user id=mejaadmin@mejakerja;password=M3tr0dat@P@s5;port=3306;persistsecurityinfo=True;database=db_brm;allowuservariables=True;Convert Zero Datetime='True'";
                 MySqlConnection conn = new MySqlConnection(connStr);
                 conn.Open();

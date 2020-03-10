@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "0607ba6892b5349a270ac27469e6634699668c80"
+    "signature": "119122120ce35bd9a0732657a528ee502e9a48a3"
   },
   "compilationOptions": {
     "defines": [
@@ -24,6 +24,7 @@
     ".NETCoreApp,Version=v2.1": {
       "ClientSide/1.0.0": {
         "dependencies": {
+          "BCrypt.Net-Next": "3.2.1",
           "Data": "1.0.0",
           "DotNetCore.NPOI": "1.2.1",
           "EPPlus": "4.1.1",
@@ -42,6 +43,17 @@
         },
         "compile": {
           "ClientSide.dll": {}
+        }
+      },
+      "BCrypt.Net-Next/3.2.1": {
+        "runtime": {
+          "lib/netstandard2.0/BCrypt.Net-Next.dll": {
+            "assemblyVersion": "3.2.1.0",
+            "fileVersion": "3.2.1.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/BCrypt.Net-Next.dll": {}
         }
       },
       "DotNetCore.NPOI/1.2.1": {
@@ -3904,6 +3916,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "BCrypt.Net-Next/3.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-tu4GTLU2QMeWxJZP/WDtiVK98QjvUqGABctT9XLKbIFJrp8ETMA3igWKdkZVkRunikBhWao6o3EsrbDWxPyaSw==",
+      "path": "bcrypt.net-next/3.2.1",
+      "hashPath": "bcrypt.net-next.3.2.1.nupkg.sha512"
     },
     "DotNetCore.NPOI/1.2.1": {
       "type": "package",

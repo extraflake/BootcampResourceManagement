@@ -94,7 +94,7 @@ namespace Data.Repositories
 
         public bool Insert(EmployeeVM employeeVM)
         {
-            employeeVM.Id = getId(5);
+            employeeVM.Id = "x"+getId(4);
             var getsecondlayer = _myContext.Employees.Where(x => x.email == employeeVM.Email || x.phone == employeeVM.Phone).FirstOrDefault();
             if (employeeVM.Id != null)
             {

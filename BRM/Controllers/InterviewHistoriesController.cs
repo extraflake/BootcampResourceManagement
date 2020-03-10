@@ -45,13 +45,13 @@ namespace BRM.Controllers
         }
 
         [HttpPut("InsertInterviewHistory")]
-        public IActionResult InsertInterviewHistory(InsertInterviewHistoryVM interviewHistory)
+        public IActionResult InsertInterviewHistory(IList<InsertInterviewHistoryVM> interviewHistory)
         {
-            var push = _interviewHistoryService.Insert(interviewHistory);
-            if (push)
-            {
-                return Ok("Insert Success");
-            }
+            //var push = _interviewHistoryService.Insert(interviewHistory);
+            //if (push.Count() > 0)
+            //{
+            //    return Ok(push);
+            //}
             return StatusCode(500);
         }
 

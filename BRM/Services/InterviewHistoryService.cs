@@ -53,21 +53,9 @@ namespace BRM.Services
             return _interviewHistoryRepository.GetVM(id);
         }
 
-        public bool Insert(InsertInterviewHistoryVM insertInterviewHistoryVM)
+        public List<SendEmailInterview> Insert(IList<InsertInterviewHistoryVM> insertInterviewHistoryVM)
         {
-            if (string.IsNullOrWhiteSpace(insertInterviewHistoryVM.interview_datetime.ToString()) ||
-                string.IsNullOrWhiteSpace(insertInterviewHistoryVM.pic.ToString()) ||
-                string.IsNullOrWhiteSpace(insertInterviewHistoryVM.create_by.ToString()) ||
-                string.IsNullOrWhiteSpace(insertInterviewHistoryVM.create_datetime.ToString()) ||
-                string.IsNullOrWhiteSpace(insertInterviewHistoryVM.update_by.ToString()) ||
-                string.IsNullOrWhiteSpace(insertInterviewHistoryVM.update_datetime.ToString()))
-            {
-                return status;
-            }
-            else
-            {
-                return _interviewHistoryRepository.Insert(insertInterviewHistoryVM);
-            }
+            return _interviewHistoryRepository.Insert(insertInterviewHistoryVM);
         }
 
         public bool Update(int id, InsertInterviewHistoryVM interviewHistory)

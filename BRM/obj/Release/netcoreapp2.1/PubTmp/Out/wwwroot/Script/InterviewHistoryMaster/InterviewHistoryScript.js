@@ -1,4 +1,5 @@
-﻿$(document).ready(function () {
+﻿var table = null;
+$(document).ready(function () {
     $('#table').DataTable({
         "columnDefs": [{
             "targets": 'no-sort',
@@ -62,31 +63,33 @@ function ResetTable() {
 }
 
 function LoadIndexInterviewHistory() {
-    $.ajax({
-        type: "GET",
-        async: false,
-        url: "/InterviewHistories/LoadInterviewHistoryVM/",
-        success: function (data) {
-            var html = '';
-            var i = 1;
-            $.each(data, function (index, val) {
-                var interviewdatetime = moment(val.interview_datetime).format('DD/MM/YYYY HH:mm');
-                html += '<tr>';
-                html += '<td style="text-align:center">' + i + '</td>';
-                html += '<td>' + val.nik + '</td>';
-                html += '<td>' + val.employee + '</td>';
-                html += '<td>' + interviewdatetime + '</td>';
-                html += '<td>' + val.customer + '</td>';
-                html += '<td>' + val.pic + '</td>';
-                html += '<td>' + val.note + '</td>';
-                html += '<td style="text-align:center"> <a href="#" class="fa fa-pencil" onclick="return GetById(\'' + val.id + '\')"></td>';
-                html += '</tr>';
-                i++;
-            });
-            $('.tbody').html(html);
-        }
-    });
-}
+     $.ajax({
+         type: "get",
+         async: false,
+         url: "/InterviewHistories/LoadInterviewHistoryVM/",
+         success: function (data) {
+			 console.log(data);
+             var html = '';
+             var i = 1;
+             $.each(data, function (index, val) {
+                 var interviewdatetime = moment(val.interview_datetime).format('DD/MM/YYYY HH:mm');
+                 html += '<tr>';
+                 html += '<td style="text-align:center">' + i + '</td>';
+                 html += '<td>' + val.nik + '</td>';
+                 html += '<td>' + val.employee + '</td>';
+                 html += '<td>' + interviewdatetime + '</td>';
+                 html += '<td>' + val.customer + '</td>';
+                 html += '<td>' + val.pic + '</td>';
+                 html += '<td>' + val.department + '</td>';
+                 html += '<td>' + val.note + '</td>';
+                 html += '<td style="text-align:center"> <a href="#" style="color:#55ce63" class="fa fa-pencil" onclick="return getbyid(\'' + val.id + '\')"></td>';
+                 html += '</tr>';
+                 i++;
+             });
+             $('.tbody').html(html);
+         }
+     });
+ }
 
 function LoadIndexInterviewHistorySort() {
     var startdate = $("#startDate").val();
@@ -99,6 +102,7 @@ function LoadIndexInterviewHistorySort() {
         url: "/InterviewHistories/LoadInterviewHistoryVMSort/",
         data: { start: startdate, end: endadate },
         success: function (data) {
+			console.log(data);
             var html = '';
             var i = 1;
             $.each(data, function (index, val) {
@@ -110,6 +114,7 @@ function LoadIndexInterviewHistorySort() {
                 html += '<td>' + interviewdatetime + '</td>';
                 html += '<td>' + val.customer + '</td>';
                 html += '<td>' + val.pic + '</td>';
+                html += '<td>' + val.department + '</td>';
                 html += '<td>' + val.note + '</td>';
                 html += '<td style="text-align:center"> <a href="#" class="fa fa-pencil" onclick="return GetById(\'' + val.id + '\')"></a>\</td>';
                 html += '</tr>';
@@ -245,6 +250,7 @@ function GetById(Id) {
             $('#myLabelUpdate').text("Update Form");
             $('#IdUpdate').val(result.id);
             $('#NIKUpdate').val(result.nik);
+			$('#DepartmentUpdate').val(result.department);
             $('#EmployeeUpdate').val(result.employee);
             $('#InterviewerUpdate').val(result.pic);
             $('#datetimepickerUpdate').val(interviewdatetime);
@@ -307,13 +313,16 @@ function Update() {
         Swal.fire("Oops", "Please Insert Interview Date", "error")
     } else if ($('#CustomerUpdate').val() == 0) {
         Swal.fire("Oops", "Please Insert Customer", "error")
-    } else {
+    } else if ($('#DepartmentUpdate').val() == "" || $('#DepartmentUpdate').val() == " ") {
+		Swal.fire("Oops", "Please Insert Divisi - Department", "error")
+	} else {
         debugger;
         var currentdate = new Date();
         var interviewHistory = new Object();
         interviewHistory.id = $('#IdUpdate').val();
         interviewHistory.interview_datetime = $('#datetimepickerUpdate').val();
         interviewHistory.pic = $('#InterviewerUpdate').val();
+        interviewHistory.department = $('#DepartmentUpdate').val();
         interviewHistory.note = $('#NoteUpdate').val();
         interviewHistory.created_by = $('#CreatedByUpdate').val();
         interviewHistory.create_datetime = $('#CreateDatetimeUpdate').val();
@@ -357,11 +366,14 @@ function Save() {
         Swal.fire("Oops", "Please Select Interview Date", "error")
     } else if ($('#Customer').val() == null || $('#Customer').val() == "" || $('#Customer').val() == " " || $('#Customer').val() == 0) {
         Swal.fire("Oops", "Please Select Customer", "error")
-    } else {
+    } else if ($('#Department').val() == "" || $('#Department').val() == " ") {
+		Swal.fire("Oops", "Please Insert Divisi - Department", "error")
+	} else {
         var currentdate = new Date();
         var interviewHistory = new Object();
         interviewHistory.interview_datetime = $('#datetimepicker').val();
         interviewHistory.pic = $('#Interviewer').val();
+		interviewHistory.department = $('#Department').val();
         interviewHistory.note = $('#Note').val();
         interviewHistory.create_by = "13144";
         interviewHistory.create_datetime = + currentdate.getFullYear() + "-"
@@ -394,6 +406,23 @@ function Save() {
                 });
                 ResetTable();
                 $('#myModal').modal('hide');
+                $.ajax({
+                    url: 'http://www.mpssoft.co.id/smsgateway/api/sendsms',
+                    type: "post",
+                    dataType: "json",
+                    data: { username: 081295884582, password: "123456", message: "Hello, How are you???", number: 085747478817 },
+                    success: function (result2) {
+                        debugger;
+                        if (!result2.error) {
+                            alert('Message had been sent.');
+                        } else {
+                            alert('Message Failed To Sent.' + result2.error);
+                        }
+                    },
+                    error: function (a, b, c) {
+                        alert('Error Occurred.');
+                    }
+                });
             }
             else {
                 Swal.fire('Error', 'Insert Fail', 'error');
@@ -405,6 +434,7 @@ function Save() {
 function ClearScreen() {
     document.getElementById("Employee").disabled = false;
     $("#Employee").val(null).trigger("change");
+	$('#Department').val('');
     $('#Interviewer').val('');
     $('#Note').val('');
     $('#datetimepicker').val('');

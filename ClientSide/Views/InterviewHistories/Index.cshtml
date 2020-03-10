@@ -10,9 +10,8 @@
     <script src="~/plugins/jquery/jquery.min.js"></script>
     <script src="~/lib/Tpicker/tpicker.js"></script>
     <link href="~/lib/Tpicker/tpicker.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/lib/timepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
-
+    <title>Interview</title>
 </head>
 <body>
     <div class="container-fluid">
@@ -69,6 +68,9 @@
                     <th style="background-color:#44e5b9;color:white;text-align:center">
                         Notes
                     </th>
+                    <th style="background-color:#44e5b9;color:white;text-align:center">
+                        Department
+                    </th>
                     <th style="background-color:#44e5b9;color:white;text-align:center" class="no-sort">
                         Action
                     </th>
@@ -120,6 +122,10 @@
                         <select id="Customer" class="pc form-control">
                             <option>Select Customer</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Divisi - Department">Divisi - Department</label>
+                        <textarea class="form-control" id="Department" placeholder="Divisi - Department"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="Note">Note</label>
@@ -177,6 +183,10 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label for="Divisi - Department">Divisi - Department</label>
+                        <textarea class="form-control" id="DepartmentUpdate" placeholder="Divisi - Department"></textarea>
+                    </div>
+                    <div class="form-group">
                         <label for="Note">Note</label>
                         <textarea class="form-control" id="NoteUpdate" placeholder="Note"></textarea>
                     </div>
@@ -189,9 +199,28 @@
         </div>
     </div>
 
+    <style>
+        .btn {
+            background-color: #44e5b9;
+            border-color: #44e5b9;
+            color: #ffffff;
+        }
+    </style>
+</body>
+</html>
+
+@section scripts {
+    <script src="~/plugins/jqueryui/jquery-ui.js"></script>
+    <link href="~/plugins/jqueryui/jquery-ui.css" rel="stylesheet" />
+    <script src="~/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/plugins/select2/dist/js/select2.full.min.js"></script>
+    <link href="~/plugins/select2/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="~/plugins/sweetalert2/sweetalert2@8.js"></script>
+    <script src="~/plugins/moment/moment.js"></script>
+    <script src="~/Script/InterviewHistoryMaster/InterviewHistoryScript.js"></script>
+    <link href="~/css/uploaddownload.css" rel="stylesheet" />
     <script src="~/plugins/bootstrap/js/popper.min.js"></script>
     <script src="~/plugins/bootstrap/js/bootstrap.min.js"></script>
-    <script src="~/plugins/moment-with-locales/moment-with-locales.min.js"></script>
 
     <script src="~/lib/timepicker/jquery.datetimepicker.full.js"></script>
 
@@ -219,27 +248,6 @@
             $('#datetimepickerupdate').datetimepicker('toggle')
         })
     </script>
-
-    <style>
-        .btn {
-            background-color: #44e5b9;
-            border-color: #44e5b9;
-            color: #ffffff;
-        }
-    </style>
-</body>
-</html>
-
-@section scripts {
-    <script src="~/plugins/jqueryui/jquery-ui.js"></script>
-    <link href="~/plugins/jqueryui/jquery-ui.css" rel="stylesheet" />
-    <script src="~/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="~/plugins/select2/dist/js/select2.full.min.js"></script>
-    <link href="~/plugins/select2/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="~/plugins/sweetalert2/sweetalert2@8.js"></script>
-    <script src="~/plugins/moment/moment.js"></script>
-    <script src="~/Script/InterviewHistoryMaster/InterviewHistoryScript.js"></script>
-    <link href="~/css/uploaddownload.css" rel="stylesheet" />
 }
 
 

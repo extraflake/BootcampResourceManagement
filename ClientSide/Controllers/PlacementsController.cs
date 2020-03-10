@@ -20,30 +20,15 @@ namespace ClientSide.Controllers
 
         public IActionResult Index()
         {
-            var a = HttpContext.Session.GetString("id");
-            var b = HttpContext.Session.GetString("name");
-            var c = HttpContext.Session.GetString("email");
-            var d = HttpContext.Session.GetString("role");
-            if (a != null && b != null && c != null && d != null)
+            var role = HttpContext.Session.GetString("role");
+            if (!string.IsNullOrWhiteSpace(role))
             {
-                if (d == "Trainer" || d == "Relation Manager")
+                if (role.Contains("_RM") || role.Contains("SUPER_ADMIN"))
                 {
                     return View(LoadPlacement());
                 }
-                else
-                {
-                    return RedirectToAction("Index", "Home");
-                }
             }
-            else
-            {
-                HttpContext.Session.Remove("Id");
-                HttpContext.Session.Remove("Name");
-                HttpContext.Session.Remove("Email");
-                HttpContext.Session.Remove("Role");
-                HttpContext.Session.Clear();
-                return RedirectToAction("Index", "Home");
-            }
+            return RedirectToAction("unauthorize", "home", null);
         }
 
         public JsonResult LoadPlacement()

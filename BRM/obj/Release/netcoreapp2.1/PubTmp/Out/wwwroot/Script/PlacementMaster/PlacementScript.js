@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
 	$('#table').DataTable({
 		"columnDefs": [{
-			"target": 'no-sort',
+			"targets": 'no-sort',
 			"orderable": false,
 		}],
 		"ajax": LoadIndexPlacement()
@@ -141,7 +141,7 @@ function ResetPlacement() {
 	$('#table').DataTable().destroy();
 	$('#table').DataTable({
 		"columnDefs": [{
-			"target": 'no-sort',
+			"targets": 'no-sort',
 			"orderable": false,
 		}],
 		"ajax": LoadIndexPlacement(),

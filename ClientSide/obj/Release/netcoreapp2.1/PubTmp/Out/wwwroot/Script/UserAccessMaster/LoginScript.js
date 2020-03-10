@@ -19,6 +19,7 @@ function ValidatePassword(pword) {
 }
 
 function Validate() {
+    debugger;
     let userEmail = $("#user").val();
     if (!ValidateEmail(userEmail)) {
         Swal.fire("Oops", "Please Insert Email Properly", "error");
@@ -39,47 +40,36 @@ function Validate() {
 }
 
 function LoginProcess(mail, pword) {
+    debugger;
     $.ajax({
         url: "/Logins/Validate/",
         type: "GET",
-        dataType: 'json',
-        contentType: 'application/x-www-form-urlencoded; charset=utf-8',
         data: { email: mail, password: pword },
-        success: function (result) {
-            if (result.StatusCode == 200) {
-                let timerInterval
-                Swal.fire({
-                    timer: 1500,
-                    imageUrl: '../images/loadingtwo.gif',
-                    showConfirmButton: false,
-                    background: 'rgba(0,0,123,0) ',
+    }).then((result) => {
+		debugger;
+        if (result.StatusCode == 200) {
+			let timerInterval
+            Swal.fire({
+				timer: 3000,
+                imageUrl: '../images/loadingtwo.gif',
+                showConfirmButton: false,
+                background: 'rgba(0,0,123,0) ',
 
-                    onClose: () => {
-                        clearInterval(timerInterval)
-                    }
-
-                }).then((result) => {
-                    if (
-                        result.dismiss === Swal.DismissReason.timer
-                    ) {
-                        console.log('I was closed by the timer')
-                    }
-                })
-                setTimeout(function () {
-                    window.location.href = '/Home/';
-                }, 1500);
-
-            }
-            else {
-                Swal.fire('Oops',
-                    'User Credential Not Match!',
-                    'error');
-            }
-        },
-        error: function (result) {
-            Swal.fire('Oops',
-                'Something Went Wrong',
-                'error');
+				onClose: () => {
+					clearInterval(timerInterval)
+                }
+			}).then((result) => {
+				if (result.dismiss === Swal.DismissReason.timer) {
+					console.log('I was closed by the timer')
+				}
+			})
+            setTimeout(function () {
+				window.location.href = '/Dashboard/';
+			}, 3000);
+		}
+        else {
+            debugger;
+			Swal.fire('Oops', 'User Credential Not Match!', 'error');
         }
-    });
+	});
 }

@@ -25,8 +25,46 @@
             }
         })
     })
-    document.getElementById("Progress_Status").hidden = true;
 });
+
+function uploadFile(inputId) {
+	debugger;
+	let timerInterval;
+    Swal.fire({
+		timer: 15000,
+        imageUrl: '../images/loadingtwo.gif',
+        showConfirmButton: false,
+        background: 'rgba(0,0,123,0) ',
+        onClose: () => {
+			clearInterval(timerInterval)
+        }
+    }).then((result) => {
+        if (result.dismiss === Swal.DismissReason.timer) {
+			console.log('I was closed by the timer')
+        }
+    })
+	var fileUpload = document.getElementById(inputId);
+    var files = fileUpload.files;
+    var data = new FormData();
+		
+	for (var i = 0; i < files.length; i++) {
+		data.append("formFile", files[i]);
+	}
+		
+	$.ajax({
+		type: "POST",
+		url: "/Employees/Upload/",
+		processData: false,
+		contentType: false,
+		data: data
+	}).then((result) => {
+		debugger;
+		setTimeout(function () {
+			Swal.fire('Success', result + ' row, Insert Successfully', 'success');
+			ResetTable();
+        }, 3000);
+	});
+}
 
 function ForgotPassword() {
     debugger;
@@ -37,20 +75,8 @@ function ForgotPassword() {
         contentType: 'application/x-www-form-urlencoded; charset=utf-8',
         data: { email: Email },
         success: function (result) {
-            debugger;
-            //var birthDate = moment(result.birth_date).format('MM/DD/YYYY');
-            //var getPhone = result.phone.substring(3, result.phone.length);
             document.getElementById("Email").disabled = true;
-            //$('#Id').val(result.id);
-            //$('#FirstName').val(result.first_name);
-            //$('#LastName').val(result.last_name);
-            //$('#Phone').val(getPhone);
             $('#Email').val(result.email);
-            //$('#Province').val(2);
-            //$('#District').val(10);
-
-            //$('#myModal').modal('show');
-            //$('#Update').show();
             $('#Send').show();
         }
     })
@@ -82,7 +108,7 @@ function LoadIndexEmployee() {
                 else {
                     getphone = "-";
                 }
-                if (id == val.id) {
+                if (id.charAt(0) == "x") {
                     html += '<tr>';
                     html += '<td style="text-align:center">' + i + '</td>';
                     html += '<td>' + val.first_name + ' ' + val.last_name + '</td>';
@@ -99,7 +125,7 @@ function LoadIndexEmployee() {
                     html += '<td style="text-align:center">' + i + '</td>';
                     html += '<td>' + val.first_name + ' ' + val.last_name + '</td>';
                     html += '<td>' + val.email + '</td>';
-                    html += '<td style="text-align:center">' + val.hiring_location + '</td>';
+                    html += '<td style="text-align:center">' + val.district + '</td>';
                     html += '<td>' + getphone + '</td>';
                     html += '<td style="text-align:center"> <a href="#" class="fa fa-pencil" onclick="return GetById(\'' + val.email + '\')"></td>';
                     html += '</tr>';
@@ -107,70 +133,6 @@ function LoadIndexEmployee() {
                 }
             });
             $('.tbody').html(html);
-        }
-    });
-}
-
-function Upload() {
-    debugger;
-    var fileExtension = ['xls', 'xlsx'];
-    var filename = $('#fUpload').val();
-    if (filename.length == 0) {
-        alert("Please select a file.");
-        return false;
-    }
-    else {
-        var extension = filename.replace(/^.*\./, '');
-        if ($.inArray(extension, fileExtension) == -1) {
-            alert("Please select only excel files.");
-            return false;
-        }
-    }
-    var fdata = new FormData();
-    var fileUpload = $("#fUpload").get(0);
-    var files = fileUpload.files;
-    fdata.append(files[0].name, files[0]);
-    let timerInterval
-    Swal.fire({
-        timer: 1500,
-        imageUrl: '../images/loadingtwo.gif',
-        showConfirmButton: false,
-        background: 'rgba(0,0,123,0) ',
-
-        onClose: () => {
-            clearInterval(timerInterval)
-        }
-
-    }).then((result) => {
-        if (
-            result.dismiss === Swal.DismissReason.timer
-        ) {
-            console.log('I was closed by the timer')
-        }
-    })
-    $.ajax({
-        type: "POST",
-        url: "/Employees/Upload/",
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("XSRF-TOKEN",
-                $('input:hidden[name="__RequestVerificationToken"]').val());
-        },
-        data: fdata,
-        contentType: false,
-        processData: false,
-    }).then((res) => {
-        debugger;
-        if (res > 0) {
-            Swal.fire('Success', res + 'row, Insert Successfully', 'success');
-            ResetTable();
-            $('#myModal').modal('hide');
-            ClearScreen();
-        }
-        else {
-            Swal.fire('Error', 'Insert Fail', 'error');
-            ResetTable();
-            $('#myModal').modal('hide');
-            ClearScreen();
         }
     });
 }
@@ -353,6 +315,7 @@ function Save() {
             ResetTable();
             $('#myModal').modal('hide');
             ClearScreen();
+            setTimeout("location.reload(true);", 1500);
         }
         else {
             Swal.fire('Error', result + ' row affected', 'error');

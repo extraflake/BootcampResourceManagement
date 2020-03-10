@@ -33,33 +33,40 @@ namespace Data.Repositories
             return result;
         }
 
-        public bool Insert(InsertInterviewHistoryVM insertInterviewHistoryVM)
+        public List<SendEmailInterview> Insert(IList<InsertInterviewHistoryVM> insertInterviewHistoryVM)
         {
-            var checkavailable = myContext.InterviewHistories.Where(x => x.employee == insertInterviewHistoryVM.employee && x.customer == insertInterviewHistoryVM.customer).ToList();
-            if (checkavailable.Count().Equals(0))
+            List<SendEmailInterview> SendEmailInterview = new List<SendEmailInterview>();
+            foreach(var item in insertInterviewHistoryVM)
             {
-                var interviewHistory = new InterviewHistory()
+                var checkavailable = myContext.InterviewHistories.Where(x => x.employee == item.employee && x.customer == item.customer && x.department == item.department && x.pic == item.pic).ToList();
+                if (checkavailable.Count().Equals(0))
                 {
-                    employee = insertInterviewHistoryVM.employee,
-                    interview_datetime = insertInterviewHistoryVM.interview_datetime,
-                    pic = insertInterviewHistoryVM.pic,
-                    note = insertInterviewHistoryVM.note,
-                    customer = insertInterviewHistoryVM.customer,
-                    department = insertInterviewHistoryVM.department,
-                    created_by = insertInterviewHistoryVM.create_by,
-                    create_datetime = insertInterviewHistoryVM.create_datetime,
-                    updated_by = insertInterviewHistoryVM.update_by,
-                    update_datetime = insertInterviewHistoryVM.update_datetime
-                };
-                myContext.InterviewHistories.Add(interviewHistory);
+                    var interviewHistory = new InterviewHistory()
+                    {
+                        employee = item.employee,
+                        interview_datetime = item.interview_datetime,
+                        pic = item.pic,
+                        note = item.note,
+                        customer = item.customer,
+                        department = item.department,
+                        created_by = item.create_by,
+                        create_datetime = item.create_datetime,
+                        updated_by = item.update_by,
+                        update_datetime = item.update_datetime
+                    };
+                    myContext.InterviewHistories.Add(interviewHistory);
+                    var result = myContext.SaveChanges();
+                    if (result > 0)
+                    {
+                        var getUser = myContext.Employees.Where(x => x.id.Equals(item.nik) && x.email.Equals(item.create_by)).SingleOrDefault();
+                        SendEmailInterview push = new SendEmailInterview(interviewHistory);
+                        push.nik = item.nik;
+                        push.email = getUser.email;
+                        SendEmailInterview.Add(push);
+                    }
+                }
             }
-            var result = myContext.SaveChanges();
-            if (result > 0)
-            {
-                status = true;
-            }
-            return status;
-
+            return SendEmailInterview;
         }
 
         public bool Update(int id, InsertInterviewHistoryVM interviewHistory)
@@ -68,6 +75,7 @@ namespace Data.Repositories
             if (get.employee == interviewHistory.employee && get.customer == interviewHistory.customer)
             {
                 get.pic = interviewHistory.pic;
+                get.department = interviewHistory.department;
                 get.note = interviewHistory.note;
                 get.interview_datetime = interviewHistory.interview_datetime;
                 myContext.Entry(get).State = EntityState.Modified;

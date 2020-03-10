@@ -39,30 +39,15 @@ namespace ClientSide.Controllers
         [Route("Participants")]
         public IActionResult Index()
         {
-            var a = HttpContext.Session.GetString("id");
-            var b = HttpContext.Session.GetString("name");
-            var c = HttpContext.Session.GetString("email");
-            var d = HttpContext.Session.GetString("role");
-            if (a != null && b != null && c != null && d != null)
+            var role = HttpContext.Session.GetString("role");
+            if (!string.IsNullOrWhiteSpace(role))
             {
-                if (d == "Trainer")
+                if (role.Contains("_MAN") || role.Contains("SUPER_ADMIN"))
                 {
                     return View(LoadEmployeeDisplay());
                 }
-                else
-                {
-                    return RedirectToAction("Index", "Home");
-                }
             }
-            else
-            {
-                HttpContext.Session.Remove("Id");
-                HttpContext.Session.Remove("Name");
-                HttpContext.Session.Remove("Email");
-                HttpContext.Session.Remove("Role");
-                HttpContext.Session.Clear();
-                return RedirectToAction("Index", "Home");
-            }
+            return RedirectToAction("unauthorize", "home", null);
         }
 
         public JsonResult LoadEmployee()
@@ -140,7 +125,6 @@ namespace ClientSide.Controllers
             return Json(employee);
         }
 
-        //[HttpGet("{id}")]
         public JsonResult LoadTrainer(string id)
         {
             IEnumerable<Employee> employee = null;
@@ -282,91 +266,100 @@ namespace ClientSide.Controllers
             return Json(result);
         }
 
-        public ActionResult Upload(IFormFile formFile)
+        public JsonResult Upload(IList<IFormFile> formFile)
         {
             object counterVM = null;
             EmployeeVM customerList = new EmployeeVM();
-            ExcelPackage excelPackage = new ExcelPackage(formFile.OpenReadStream());
-            //DataTable dataTable = DemoResponse.DataTable(excelPackage);
-            ExcelWorksheet excelWorksheet = excelPackage.Workbook.Worksheets["Kandidat Bootcamp " + DateTime.Now.Year];
-            int totalRows = excelWorksheet.Dimension.Rows;
-            
-            for(int i = 2; i <= totalRows; i++)
+            foreach(IFormFile source in formFile)
             {
-                string checklast = excelWorksheet.Cells[i, 3].Value.ToString();
-                string checkfirst = excelWorksheet.Cells[i, 2].Value.ToString();
-                string id = null;
-                if (checklast.Length < 3 && checkfirst.Length < 2)
+                using (var stream = new MemoryStream())
                 {
-                    id = excelWorksheet.Cells[i, 2].Value.ToString() + excelWorksheet.Cells[i, 3].Value.ToString();
-                }
-                else if (checklast.Length < 3)
-                {
-                    id = excelWorksheet.Cells[i, 2].Value.ToString().Substring(0, 2) + excelWorksheet.Cells[i, 3].Value.ToString();
-                }
-                else if (checkfirst.Length < 2)
-                {
-                    id = excelWorksheet.Cells[i, 2].Value.ToString() + excelWorksheet.Cells[i, 3].Value.ToString().Substring(0, 3);
-                }
-                else
-                {
-                    id = excelWorksheet.Cells[i, 2].Value.ToString().Substring(0, 2) + excelWorksheet.Cells[i, 3].Value.ToString().Substring(0, 3);
-                }
-                var firstName = excelWorksheet.Cells[i, 2].Value.ToString();
-                var lastName = excelWorksheet.Cells[i, 3].Value.ToString();
-                var phone = excelWorksheet.Cells[i, 10].Value.ToString();
-                var email = excelWorksheet.Cells[i, 6].Value.ToString();
-                var batch = excelWorksheet.Cells[i, 4].Value.ToString().Substring(9, 2);
-                var onboard = excelWorksheet.Cells[i, 5].Value.ToString();
-                var isExist = _db.Employees.FirstOrDefault(x => x.email == email && x.id == id);
-                var isBatchExist = _db.Batches.FirstOrDefault(x => x.Id == batch);
-                if (isExist == null)
-                {
-                    if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName) || string.IsNullOrWhiteSpace(phone)
-                        || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(batch) ||
-                        string.IsNullOrWhiteSpace(onboard))
+                    source.CopyToAsync(stream);
+
+                    using (var package = new ExcelPackage(stream))
                     {
-                        break;
-                    }
-                    else
-                    {
-                        string validatePhone = "0";
-                        string phoneValidate = phone;
-                        if (phoneValidate.ToString().Substring(0, 1) == "0")
+                        ExcelWorksheet excelWorksheet = package.Workbook.Worksheets["Kandidat Bootcamp " + DateTime.Now.Year];
+                        var rowCount = excelWorksheet.Dimension.Rows;
+
+                        for (int i = 2; i <= rowCount; i++)
                         {
-                            validatePhone = phone.Remove(0, 1);
+                            string checklast = excelWorksheet.Cells[i, 3].Value.ToString();
+                            string checkfirst = excelWorksheet.Cells[i, 2].Value.ToString();
+                            string id = null;
+                            if (checklast.Length < 3 && checkfirst.Length < 2)
+                            {
+                                id = excelWorksheet.Cells[i, 2].Value.ToString() + excelWorksheet.Cells[i, 3].Value.ToString();
+                            }
+                            else if (checklast.Length < 3)
+                            {
+                                id = excelWorksheet.Cells[i, 2].Value.ToString().Substring(0, 2) + excelWorksheet.Cells[i, 3].Value.ToString();
+                            }
+                            else if (checkfirst.Length < 2)
+                            {
+                                id = excelWorksheet.Cells[i, 2].Value.ToString() + excelWorksheet.Cells[i, 3].Value.ToString().Substring(0, 3);
+                            }
+                            else
+                            {
+                                id = excelWorksheet.Cells[i, 2].Value.ToString().Substring(0, 2) + excelWorksheet.Cells[i, 3].Value.ToString().Substring(0, 3);
+                            }
+                            var firstName = excelWorksheet.Cells[i, 2].Value.ToString();
+                            var lastName = excelWorksheet.Cells[i, 3].Value.ToString();
+                            var phone = excelWorksheet.Cells[i, 10].Value.ToString();
+                            var email = excelWorksheet.Cells[i, 6].Value.ToString();
+                            var batch = excelWorksheet.Cells[i, 4].Value.ToString().Substring(9, 2);
+                            var onboard = excelWorksheet.Cells[i, 5].Value.ToString();
+                            var isExist = _db.Employees.FirstOrDefault(x => x.email == email && x.id == id);
+                            var isBatchExist = _db.Batches.FirstOrDefault(x => x.Id == batch);
+                            if (isExist == null)
+                            {
+                                if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName) || string.IsNullOrWhiteSpace(phone)
+                                    || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(batch) ||
+                                    string.IsNullOrWhiteSpace(onboard))
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    string validatePhone = "0";
+                                    string phoneValidate = phone;
+                                    if (phoneValidate.ToString().Substring(0, 1) == "0")
+                                    {
+                                        validatePhone = phone.Remove(0, 1);
+                                    }
+                                    else if (phoneValidate.ToString().Substring(0, 1) == "1" ||
+                                      phoneValidate.ToString().Substring(0, 1) == "2" ||
+                                      phoneValidate.ToString().Substring(0, 1) == "3" ||
+                                      phoneValidate.ToString().Substring(0, 1) == "4" ||
+                                      phoneValidate.ToString().Substring(0, 1) == "5" ||
+                                      phoneValidate.ToString().Substring(0, 1) == "6" ||
+                                      phoneValidate.ToString().Substring(0, 1) == "7" ||
+                                      phoneValidate.ToString().Substring(0, 1) == "9")
+                                    {
+                                        validatePhone = String.Concat("8", phoneValidate.Remove(0, 1));
+                                    }
+                                    customerList.Id = id;
+                                    customerList.FirstName = firstName;
+                                    customerList.LastName = lastName;
+                                    customerList.Phone = validatePhone;
+                                    customerList.Email = email;
+                                    customerList.Hiring_Location = 1;
+                                    customerList.Religion = 1;
+                                    customerList.Village = 1;
+                                    var result = Insert(customerList);
+                                    counterVM = result.Value;
+                                }
+                                if (isBatchExist == null)
+                                {
+                                    var map = new BatchVM
+                                    {
+                                        StartDate = Convert.ToDateTime(onboard),
+                                        Id = batch
+                                    };
+                                    BatchesController batchesController = new BatchesController();
+                                    batchesController.Insert(map);
+                                }
+                            }
                         }
-                        else if (phoneValidate.ToString().Substring(0, 1) == "1" ||
-                          phoneValidate.ToString().Substring(0, 1) == "2" ||
-                          phoneValidate.ToString().Substring(0, 1) == "3" ||
-                          phoneValidate.ToString().Substring(0, 1) == "4" ||
-                          phoneValidate.ToString().Substring(0, 1) == "5" ||
-                          phoneValidate.ToString().Substring(0, 1) == "6" ||
-                          phoneValidate.ToString().Substring(0, 1) == "7" ||
-                          phoneValidate.ToString().Substring(0, 1) == "9")
-                        {
-                            validatePhone = String.Concat("8", phoneValidate.Remove(0, 1));
-                        }
-                        customerList.Id = id;
-                        customerList.FirstName = firstName;
-                        customerList.LastName = lastName;
-                        customerList.Phone = validatePhone;
-                        customerList.Email = email;
-                        customerList.Hiring_Location = 1;
-                        customerList.Religion = 1;
-                        customerList.Village = 1;
-                        var result = Insert(customerList);
-                        counterVM = result.Value;
-                    }
-                    if (isBatchExist == null)
-                    {
-                        var map = new BatchVM
-                        {
-                            StartDate = Convert.ToDateTime(onboard),
-                            Id = batch
-                        };
-                        BatchesController batchesController = new BatchesController();
-                        batchesController.Insert(map);
                     }
                 }
             }
